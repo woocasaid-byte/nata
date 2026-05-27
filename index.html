@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Supernata 3D Furniture Configurator</title>
+    
+    <!-- Pustaka Utama Grafik 3D (Lolos Blokir Keamanan Server Netlify) -->
+    <script src="https://cloudflare.com"></script>
+    <script src="https://jsdelivr.net"></script>
+
+    <!-- Gaya Tampilah Murni Kustom (Bebas Error Layar Putih Tailwind) -->
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body, html { width: 100%; height: 100%; background-color: #0f172a; color: #f8fafc; overflow: hidden; }
+        
+        .main-container { display: flex; flex-direction: row; width: 100vw; height: 100vh; }
+        
+        /* Area Grafik Lemari 3D */
+        #canvas-container { width: 66.666%; height: 100%; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); relative; position: relative; }
+        
+        /* Panel Kontrol Fitur Supernata */
+        .control-panel { width: 33.333%; height: 100%; background-color: #020617; border-left: 1px solid #1e293b; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; z-index: 10; }
+        
+        /* Bagian Atas / Header */
+        .header { border-b: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
+        .brand-title { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; display: flex; align-items: center; gap: 8px; }
+        .brand-badge { background-color: #4f46e5; font-size: 10px; font-weight: bold; padding: 4px 8px; rounded-radius: 4px; border-radius: 4px; letter-spacing: 0.5px; }
+        .premium-tag { font-size: 10px; font-weight: bold; color: #34d399; background: rgba(52, 211, 153, 0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(52, 211, 153, 0.2); }
+        
+        /* Kartu Group Kontrol */
+        .control-group { background-color: #0f172a; border: 1px solid #1e293b; padding: 16px; border-radius: 12px; margin-bottom: 16px; }
+        .group-title { font-size: 11px; font-weight: 800; text-transform: uppercase; tracking-spacing: 1px; color: #94a3b8; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+        .group-title-dot { width: 6px; height: 12px; background-color: #4f46e5; border-radius: 2px; display: inline-block; }
+        
+        /* Elemen Input Slider Ukuran */
+        .input-wrapper { margin-bottom: 14px; }
+        .input-label-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; color: #cbd5e1; margin-bottom: 6px; }
+        .value-badge { font-weight: 700; color: #818cf8; background-color: rgba(79, 70, 229, 0.15); padding: 2px 8px; border-radius: 6px; }
+        .custom-slider { width: 100%; height: 6px; background: #1e293b; border-radius: 4px; outline: none; -webkit-appearance: none; cursor: pointer; }
+        .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #4f46e5; cursor: pointer; transition: transform 0.1s; }
+        .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        
+        /* Elemen Input Sekat */
+        .number-input { width: 100%; background-color: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 10px 14px; color: #ffffff; font-weight: 600; font-size: 14px; outline: none; }
+        .number-input:focus { border-color: #4f46e5; }
+        
+        /* Tombol Pilihan Modul */
+        .grid-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+        .btn-option { background-color: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 10px 4px; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s ease; text-align: center; }
+        .btn-option.active { background-color: #4f46e5; border-color: #6366f1; color: #ffffff; }
+        
+        /* Palet Varian Warna HPL */
+        .color-row { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+        .color-dot { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #020617; cursor: pointer; transition: all 0.2s; outline: 2px solid transparent; }
+        .color-dot.active { outline-color: #4f46e5; }
+        .material-text { font-size: 11px; color: #94a3b8; margin-top: 8px; }
+        .material-text span { color: #f1f5f9; font-weight: 700; }
+        
+        /* Bagian Bawah / Harga & Checkout */
+        .footer-pricing { border-top: 1px solid #1e293b; padding-top: 16px; background-color: #020617; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .price-info-title { font-size: 10px; text-transform: uppercase; font-weight: 800; color: #64748b; letter-spacing: 0.5px; }
+        .price-info-sub { font-size: 9px; color: #10b981; font-weight: 500; margin-top: 2px; }
+        #label-harga { font-size: 24px; font-weight: 900; color: #10b981; letter-spacing: -0.5px; }
+        
+        .btn-checkout { width: 100%; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border: none; color: #ffffff; font-weight: 700; font-size: 14px; padding: 14px; border-radius: 12px; cursor: pointer; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2); transition: all 0.15s ease; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-checkout:active { transform: scale(0.97); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
+        
+        /* Banner Keterangan Di Atas Canvas */
+        .canvas-badge { position: absolute; top: 16px; left: 16px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); padding: 10px 16px; border-radius: 12px; border: 1px solid rgba(30, 41, 59, 0.6); z-index: 5; pointer-events: none; }
+        .badge-status { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 900; color: #818cf8; letter-spacing: 1px; }
+        .status-dot { width: 6px; height: 6px; background-color: #34d399; border-radius: 50%; box-shadow: 0 0 8px #34d399; }
+        .badge-sub { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+        /* Optimasi Responsif Layar Handphone (Mobile) */
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; }
+            #canvas-container { width: 100%; height: 50vh; }
+            .control-panel { width: 100%; height: 50vh; padding: 16px; }
+            .header { margin-bottom: 16px; padding-bottom: 10px; }
+            .control-group { padding: 12px; margin-bottom: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- SEKTOR KANVAS ENGINE 3D SUPERNATA -->
+        <div id="canvas-container">
+            <div class="canvas-badge">
+                <div class="badge-status">
+                    <span class="status-dot"></span>SUPERNATA ENGINE ACTIVE
+                </div>
+                <div class="badge-sub">Gunakan mouse/jari untuk memutar & zoom model lemari</div>
+            </div>
+        </div>
+
+        <!-- PANEL PANEL KONTROL DESAIN & KUSTOMISASI -->
+        <div class="control-panel">
+            <div>
+                <!-- Header Brand -->
+                <div class="header">
+                    <div>
+                        <h1 class="brand-title">
+                            <span class="brand-badge">SUPERNATA</span> CLONE
+                        </h1>
+                    </div>
+                    <span class="premium-tag">PREMIUM PRODUCTION</span>
+                </div>
+
+                <!-- MENU 1: INPUT DIMENSI UKURAN -->
+                <div class="control-group">
+                    <h2 class="group-title"><span class="group-title-dot"></span>1. Atur Ukuran Presisi (cm)</h2>
+                    <div class="input-wrapper">
+                        <div class="input-label-row">
+                            <label>Tinggi Kabinet</label>
+                            <span id="label-tinggi" class="value-badge">160 cm</span>
+                        </div>
+                        <input id="range-tinggi" type="range" min="80" max="220" value="160" class="custom-slider">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label-row">
+                            <label>Lebar Kabinet</label>
+                            <span id="label-lebar" class="value-badge">100 cm</span>
+                        </div>
+                        <input id="range-lebar" type="range" min="60" max="160" value="100" class="custom-slider">
+                    </div>
+                </div>
+
+                <!-- MENU 2: ATUR SUSUNAN SEKAT DAN STRUKTUR LAYOUT -->
+                <div class="control-group">
+                    <h2 class="group-title"><span class="group-title-dot"></span>2. Tata Letak Modul Ruang</h2>
+                    <div class="input-wrapper" style="margin-bottom: 14px;">
+                        <label class="input-label-row" style="font-size: 13px; color: #cbd5e1; margin-bottom: 6px;">Jumlah Lajur Kompartemen</label>
+                        <input id="input-sekat" type="number" min="1" max="5" value="3" class="number-input">
+                    </div>
+                    <div>
+                        <label class="input-label-row" style="font-size: 13px; color: #cbd5e1;">Jenis Bukaan Kabinet</label>
+                        <div class="grid-options">
+                            <button onclick="gantiModul('terbuka')" id="opt-terbuka" class="btn-option active">Terbuka</button>
+                            <button onclick="gantiModul('pintu')" id="opt-pintu" class="btn-option">Pintu</button>
