@@ -20,12 +20,13 @@
         }
 
         #cabinet-canvas {
+            position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
             display: block;
         }
 
         .control-panel {
-            width: 320px; min-width: 280px; height: 100%;
+            width: 340px; min-width: 320px; height: 100%;
             background-color: #020617;
             border-left: 1px solid #1e293b;
             padding: 18px 16px;
@@ -40,11 +41,10 @@
             padding-bottom: 14px; margin-bottom: 16px;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .brand-title { font-size: 14px; font-weight: 900; letter-spacing: -0.5px; color: #fff; display: flex; align-items: center; gap: 7px; }
-        .brand-badge { background: linear-gradient(135deg,#4f46e5,#7c3aed); font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 4px; letter-spacing: 0.5px; }
+        .brand-title { font-size: 15px; font-weight: 900; letter-spacing: -0.5px; color: #fff; display: flex; align-items: center; gap: 7px; }
+        .brand-badge { background: linear-gradient(135deg,#4f46e5,#7c3aed); font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 4px; letter-spacing: 0.5px; color: #fff; }
         .live-badge { font-size: 9px; font-weight: 700; color: #34d399; background: rgba(52,211,153,0.1); padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(52,211,153,0.2); display: flex; align-items: center; gap: 4px; }
-        .live-dot { width: 5px; height: 5px; background: #34d399; border-radius: 50%; animation: blink 1.6s ease-in-out infinite; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .live-dot { width: 5px; height: 5px; background: #34d399; border-radius: 50%; }
 
         /* ---- Control Group ---- */
         .control-group {
@@ -72,7 +72,6 @@
             background: linear-gradient(135deg,#4f46e5,#7c3aed); cursor: pointer;
             box-shadow: 0 2px 8px rgba(79,70,229,0.45); transition: transform 0.1s;
         }
-        .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
 
         /* ---- Option Buttons ---- */
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
@@ -84,39 +83,32 @@
         }
         .btn-opt:hover { border-color: #4f46e5; color: #818cf8; }
         .btn-opt.active { background: rgba(79,70,229,0.18); border-color: #4f46e5; color: #fff; }
-        .btn-icon { font-size: 15px; display: block; margin-bottom: 2px; }
 
         /* ---- Color Grid ---- */
-        .color-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin-top: 8px; }
+        .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 8px; }
         .color-swatch {
             width: 100%; aspect-ratio: 1; border-radius: 7px;
             border: 2px solid rgba(255,255,255,0.06); cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
-        .color-swatch:hover { transform: scale(1.12); }
-        .color-swatch.active { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79,70,229,0.4); transform: scale(1.07); }
+        .color-swatch.active { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79,70,229,0.4); }
         .material-label { font-size: 10px; color: #818cf8; margin-top: 7px; font-weight: 600; }
 
         /* ---- Pricing Footer ---- */
         .pricing-footer { border-top: 1px solid #1e293b; padding-top: 14px; margin-top: auto; }
-        .breakdown { margin-bottom: 10px; }
         .breakdown-row { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-bottom: 3px; }
         .total-row {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 0; border-top: 1px solid #1e293b; margin-bottom: 10px;
         }
         .total-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; }
-        .total-sub { font-size: 9px; color: #10b981; margin-top: 1px; }
-        #label-harga { font-size: 20px; font-weight: 900; color: #10b981; letter-spacing: -0.5px; transition: color 0.2s; }
+        #label-harga { font-size: 20px; font-weight: 900; color: #10b981; letter-spacing: -0.5px; }
         .btn-pesan {
             width: 100%; background: linear-gradient(135deg,#4f46e5,#7c3aed);
-            border: none; color: #fff; font-weight: 700; font-size: 12px;
+            border: none; color: #fff; font-weight: 700; font-size: 11px;
             padding: 13px; border-radius: 10px; cursor: pointer;
-            box-shadow: 0 6px 18px rgba(79,70,229,0.3); transition: all 0.15s;
-            text-transform: uppercase; letter-spacing: 0.5px;
+            box-shadow: 0 6px 18px rgba(79,70,229,0.3); text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .btn-pesan:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(79,70,229,0.4); }
-        .btn-pesan:active { transform: scale(0.98); }
 
         /* ---- Canvas Overlays ---- */
         .canvas-badge {
@@ -132,58 +124,67 @@
             position: absolute; bottom: 14px; left: 14px;
             background: rgba(10,18,35,0.88); backdrop-filter: blur(8px);
             padding: 7px 12px; border-radius: 10px; border: 1px solid rgba(30,41,59,0.7);
-            z-index: 5; pointer-events: none; font-size: 10px;
-            font-family: 'SF Mono', 'Fira Mono', monospace; color: #64748b;
+            z-index: 5; pointer-events: none; font-size: 10px; color: #64748b;
         }
         .canvas-dims span { color: #818cf8; font-weight: 700; }
 
-        /* ---- Mobile ---- */
         @media (max-width: 768px) {
             .main-container { flex-direction: column; }
             #canvas-container { width: 100%; height: 45vh; flex: none; }
             .control-panel { width: 100%; min-width: auto; height: 55vh; }
         }
     </style>
-    
-    <!-- Library Pustaka Grafik 3D Resmi & Stabil -->
+    <!-- Amankan pemanggilan Pustaka 3D Terpadu Langsung Lolos CORS Netlify -->
     <script src="https://cloudflare.com"></script>
-    <script src="https://jsdelivr.net"></script>
+    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
 <div class="main-container">
 
-    <!-- ══════════════ CANVAS AREA ══════════════ -->
+    <!-- Area Kanvas Preview 3D -->
     <div id="canvas-container">
         <div class="canvas-badge">
-            <div class="badge-title"><span style="width:5px; height:5px; background:#4f46e5; border-radius:50%"></span>PRINCIPIA 3D ENGINE</div>
-            <div class="badge-sub">Gunakan mouse/jari untuk memutar objek</div>
+            <div class="badge-title"><span style="width:5px; height:5px; background:#818cf8; border-radius:50%;"></span>SUPERNATA WEB ENGINE</div>
+            <div class="badge-sub">3D Real-time Precision Rendering</div>
         </div>
-        
         <div class="canvas-dims">
-            W: <span id="dim-w">100</span>cm × H: <span id="dim-h">160</span>cm × D: <span>40</span>cm
+            Dimensi: <span id="dim-l">100</span>x<span id="dim-t">160</span>x<span>40</span> cm
         </div>
-
         <canvas id="cabinet-canvas"></canvas>
     </div>
 
-    <!-- ══════════════ PANEL KENDALI ══════════════ -->
+    <!-- Panel Kontrol Fitur -->
     <div class="control-panel">
         <div class="header">
-            <div class="brand-title">SUPERNATA <span class="brand-badge">STUDIO</span></div>
+            <div class="brand-title"><span class="brand-badge">SUPERNATA</span> CLONE</div>
             <div class="live-badge"><span class="live-dot"></span>LIVE PRICE</div>
         </div>
 
-        <!-- Group 1: Dimensi -->
+        <!-- 1. UKURAN -->
         <div class="control-group">
-            <div class="group-title"><div class="group-dot"></div>1. Dimensi Utama</div>
+            <div class="group-title"><div class="group-dot"></div>1. Dimensi Kabinet</div>
             <div class="input-row">
-                <div class="label-row"><span>Tinggi Kabinet</span><span id="badge-tinggi" class="val-badge">160 cm</span></div>
+                <div class="label-row"><span>Tinggi</span><span id="val-tinggi" class="val-badge">160 cm</span></div>
                 <input id="slider-tinggi" type="range" min="80" max="220" value="160" class="custom-slider">
             </div>
             <div class="input-row">
-                <div class="label-row"><span>Lebar Kabinet</span><span id="badge-lebar" class="val-badge">100 cm</span></div>
+                <div class="label-row"><span>Lebar</span><span id="val-lebar" class="val-badge">100 cm</span></div>
                 <input id="slider-lebar" type="range" min="60" max="160" value="100" class="custom-slider">
             </div>
         </div>
 
+        <!-- 2. BUKAAN MODUL -->
+        <div class="control-group">
+            <div class="group-title"><div class="group-dot"></div>2. Kompartemen & Pintu</div>
+            <div class="input-row" style="margin-bottom:12px;">
+                <div class="label-row"><span>Jumlah Sekat Ruang</span></div>
+                <div class="grid-3">
+                    <button class="btn-opt btn-sekat" data-sekat="2">2 Ruang</button>
+                    <button class="btn-opt btn-sekat active" data-sekat="3">3 Ruang</button>
+                    <button class="btn-opt btn-sekat" data-sekat="4">4 Ruang</button>
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="label-row"><span>Tipe Bukaan Depan</span></div>
+                <div class="grid-3">
