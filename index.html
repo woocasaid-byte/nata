@@ -20,7 +20,6 @@
         }
 
         #cabinet-canvas {
-            position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
             display: block;
         }
@@ -41,8 +40,8 @@
             padding-bottom: 14px; margin-bottom: 16px;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .brand-title { font-size: 16px; font-weight: 900; letter-spacing: -0.5px; color: #fff; display: flex; align-items: center; gap: 7px; }
-        .brand-badge { background: linear-gradient(135deg,#4f46e5,#7c3aed); font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 4px; letter-spacing: 0.5px; color: #fff; }
+        .brand-title { font-size: 14px; font-weight: 900; letter-spacing: -0.5px; color: #fff; display: flex; align-items: center; gap: 7px; }
+        .brand-badge { background: linear-gradient(135deg,#4f46e5,#7c3aed); font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 4px; letter-spacing: 0.5px; }
         .live-badge { font-size: 9px; font-weight: 700; color: #34d399; background: rgba(52,211,153,0.1); padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(52,211,153,0.2); display: flex; align-items: center; gap: 4px; }
         .live-dot { width: 5px; height: 5px; background: #34d399; border-radius: 50%; animation: blink 1.6s ease-in-out infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -77,6 +76,7 @@
 
         /* ---- Option Buttons ---- */
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
         .btn-opt {
             background: #020617; border: 1px solid #1e293b; border-radius: 8px;
             padding: 8px 3px; color: #64748b; font-size: 10px; font-weight: 700;
@@ -87,19 +87,20 @@
         .btn-icon { font-size: 15px; display: block; margin-bottom: 2px; }
 
         /* ---- Color Grid ---- */
-        .color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 8px; }
+        .color-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin-top: 8px; }
         .color-swatch {
             width: 100%; aspect-ratio: 1; border-radius: 7px;
             border: 2px solid rgba(255,255,255,0.06); cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            display: flex; align-items: center; justify-content: center;
         }
         .color-swatch:hover { transform: scale(1.12); }
         .color-swatch.active { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79,70,229,0.4); transform: scale(1.07); }
-        .material-label { font-size: 10px; color: #818cf8; margin-top: 7px; font-weight: 600; text-align: center; }
+        .material-label { font-size: 10px; color: #818cf8; margin-top: 7px; font-weight: 600; }
 
         /* ---- Pricing Footer ---- */
         .pricing-footer { border-top: 1px solid #1e293b; padding-top: 14px; margin-top: auto; }
+        .breakdown { margin-bottom: 10px; }
+        .breakdown-row { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-bottom: 3px; }
         .total-row {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 0; border-top: 1px solid #1e293b; margin-bottom: 10px;
@@ -143,7 +144,8 @@
             .control-panel { width: 100%; min-width: auto; height: 55vh; }
         }
     </style>
-    <!-- Pemanggilan Engine Grafik Pendukung yang Lolos Sistem Blokir CORS Netlify -->
+    
+    <!-- Library Pustaka Grafik 3D Resmi & Stabil -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 </head>
@@ -154,35 +156,34 @@
     <!-- ══════════════ CANVAS AREA ══════════════ -->
     <div id="canvas-container">
         <div class="canvas-badge">
-            <div class="badge-title"><span style="width:5px;height:5px;background:#818cf8;border-radius:50%"></span>PRATINJAU REAL-TIME 3D</div>
-            <div class="badge-sub">Klik-tahan mouse untuk memutar lemari kabinet</div>
+            <div class="badge-title"><span style="width:5px; height:5px; background:#4f46e5; border-radius:50%"></span>PRINCIPIA 3D ENGINE</div>
+            <div class="badge-sub">Gunakan mouse/jari untuk memutar objek</div>
         </div>
         
         <div class="canvas-dims">
-            T: <span id="dim-t">160</span>cm &nbsp;|&nbsp; L: <span id="dim-l">100</span>cm &nbsp;|&nbsp; D: <span>40</span>cm
+            W: <span id="dim-w">100</span>cm × H: <span id="dim-h">160</span>cm × D: <span>40</span>cm
         </div>
 
         <canvas id="cabinet-canvas"></canvas>
     </div>
 
-    <!-- ══════════════ PANEL KONTROL INTERAKTIF ══════════════ -->
+    <!-- ══════════════ PANEL KENDALI ══════════════ -->
     <div class="control-panel">
         <div class="header">
-            <div class="brand-title">SUPERNATA <span class="brand-badge">CLONE</span></div>
-            <div class="live-badge"><span class="live-dot"></span>LIVE MODELLER</div>
+            <div class="brand-title">SUPERNATA <span class="brand-badge">STUDIO</span></div>
+            <div class="live-badge"><span class="live-dot"></span>LIVE PRICE</div>
         </div>
 
-        <!-- Group 1: Ukuran -->
+        <!-- Group 1: Dimensi -->
         <div class="control-group">
-            <div class="group-title"><div class="group-dot"></div>1. Dimensi Kabinet</div>
+            <div class="group-title"><div class="group-dot"></div>1. Dimensi Utama</div>
             <div class="input-row">
-                <div class="label-row"><span>Tinggi Lemari</span><span class="val-badge" id="badge-tinggi">160 cm</span></div>
-                <input type="range" min="80" max="220" value="160" id="slider-tinggi" class="custom-slider">
+                <div class="label-row"><span>Tinggi Kabinet</span><span id="badge-tinggi" class="val-badge">160 cm</span></div>
+                <input id="slider-tinggi" type="range" min="80" max="220" value="160" class="custom-slider">
             </div>
             <div class="input-row">
-                <div class="label-row"><span>Lebar Lemari</span><span class="val-badge" id="badge-lebar">100 cm</span></div>
-                <input type="range" min="60" max="160" value="100" id="slider-lebar" class="custom-slider">
+                <div class="label-row"><span>Lebar Kabinet</span><span id="badge-lebar" class="val-badge">100 cm</span></div>
+                <input id="slider-lebar" type="range" min="60" max="160" value="100" class="custom-slider">
             </div>
         </div>
 
-        <!-- Group 2: Tata Letak Kompartemen -->
